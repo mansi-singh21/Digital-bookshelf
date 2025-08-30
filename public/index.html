@@ -1,152 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Digital Bookshelf</title>
-    <link rel="stylesheet" href="/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Digital Bookshelf</title>
+  <!-- ✅ Correct absolute path for CSS -->
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <!-- User Header -->
-    <div class="user-header">
-        <div class="user-info">
-            <span id="welcome-message">Welcome, User!</span>
-            <button class="logout-btn" onclick="logout()">Logout</button>
-        </div>
+  <!-- User Header -->
+  <div class="user-header">
+    <div class="user-info">
+      <span id="welcome-message">Welcome, User!</span>
+      <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
+  </div>
 
-    <div class="header">
-        <h1>📚 My Digital Bookshelf</h1>
-        <p>Track your reading journey and discover new books</p>
+  <div class="header">
+    <h1>📚 My Digital Bookshelf</h1>
+    <p>Track your reading journey and discover new books</p>
+  </div>
+  
+  <div class="bookshelf-container">
+    <!-- Read Books Shelf -->
+    <div class="shelf">
+      <h2 class="shelf-title">📖 Books I've Read</h2>
+      <div class="books-container" id="read-books">
+        <div class="add-book-btn" onclick="openAddBook('read')" title="Add a book you've read">+</div>
+      </div>
     </div>
     
-    <div class="bookshelf-container">
-        <!-- Read Books Shelf -->
-        <div class="shelf">
-            <h2 class="shelf-title">📖 Books I've Read</h2>
-            <div class="books-container" id="read-books">
-                <div class="add-book-btn" onclick="openAddBook('read')" title="Add a book you've read">+</div>
-            </div>
-        </div>
-        
-        <!-- Currently Reading Shelf -->
-        <div class="shelf">
-            <h2 class="shelf-title">📑 Currently Reading</h2>
-            <div class="books-container" id="unread-books">
-                <div class="add-book-btn" onclick="openAddBook('unread')" title="Add a book you're reading">+</div>
-            </div>
-        </div>
-        
-        <!-- Wishlist Shelf -->
-        <div class="shelf">
-            <h2 class="shelf-title">💫 Wishlist</h2>
-            <div class="books-container" id="wishlist-books">
-                <div class="add-book-btn" onclick="openAddBook('wishlist')" title="Add a book to your wishlist">+</div>
-            </div>
-        </div>
-        
-        <!-- Explore New Books -->
-        <div class="explore-section">
-            <h3>🔍 Explore New Books</h3>
-            <div class="genre-tags">
-                <div class="genre-tag" onclick="exploreGenre('Fiction')">Fiction</div>
-                <div class="genre-tag" onclick="exploreGenre('Mystery')">Mystery</div>
-                <div class="genre-tag" onclick="exploreGenre('Romance')">Romance</div>
-                <div class="genre-tag" onclick="exploreGenre('Science Fiction')">Sci-Fi</div>
-                <div class="genre-tag" onclick="exploreGenre('Fantasy')">Fantasy</div>
-                <div class="genre-tag" onclick="exploreGenre('Non-fiction')">Non-Fiction</div>
-                <div class="genre-tag" onclick="exploreGenre('Biography')">Biography</div>
-            </div>
-        </div>
+    <!-- Currently Reading Shelf -->
+    <div class="shelf">
+      <h2 class="shelf-title">📑 Currently Reading</h2>
+      <div class="books-container" id="unread-books">
+        <div class="add-book-btn" onclick="openAddBook('unread')" title="Add a book you're reading">+</div>
+      </div>
     </div>
     
-    <!-- Loading Indicator -->
-    <div class="loading-overlay" id="loading-overlay">
-        <div class="spinner"></div>
-        <p>Loading...</p>
+    <!-- Wishlist Shelf -->
+    <div class="shelf">
+      <h2 class="shelf-title">💫 Wishlist</h2>
+      <div class="books-container" id="wishlist-books">
+        <div class="add-book-btn" onclick="openAddBook('wishlist')" title="Add a book to your wishlist">+</div>
+      </div>
     </div>
     
-    <!-- Overlay for modal -->
-    <div class="overlay" id="overlay" onclick="closeModal()"></div>
-    
-    <!-- Book Details Modal -->
-    <div class="book-details" id="book-modal">
-        <h3 id="modal-title">Add New Book</h3>
-        
-        <div class="input-group">
-            <label for="book-title">Book Title:</label>
-            <input type="text" id="book-title" placeholder="Enter book title">
-        </div>
-        
-        <div class="input-group">
-            <label for="book-author">Author:</label>
-            <input type="text" id="book-author" placeholder="Enter author name">
-        </div>
-        
-        <div class="input-group">
-            <label for="book-genre">Genre:</label>
-            <select id="book-genre">
-                <option value="">Select a genre</option>
-                <option value="Fiction">Fiction</option>
-                <option value="Non-fiction">Non-fiction</option>
-                <option value="Mystery">Mystery</option>
-                <option value="Romance">Romance</option>
-                <option value="Science Fiction">Science Fiction</option>
-                <option value="Fantasy">Fantasy</option>
-                <option value="Biography">Biography</option>
-                <option value="History">History</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
-        
-        <div class="input-group" id="progress-group" style="display: none;">
-            <label for="book-pages">Total Pages:</label>
-            <input type="number" id="book-pages" placeholder="Total pages">
-            
-            <label for="current-page" style="margin-top: 10px;">Current Page:</label>
-            <input type="number" id="current-page" placeholder="Page you're on" oninput="updateProgress()">
-            
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-                </div>
-                <small id="progress-text">Progress: 0%</small>
-            </div>
-        </div>
-        
-        <div class="input-group">
-            <label for="book-notes">Notes/Summary:</label>
-            <textarea id="book-notes" placeholder="Your thoughts about this book..."></textarea>
-        </div>
-        
-        <div class="ai-features">
-            <button class="btn-secondary" onclick="generateAISummary()" id="ai-summary-btn">
-                ✨ Generate AI Summary
-            </button>
-        </div>
-        
-        <div id="recommendations" class="recommendations" style="display: none;">
-            <h4>📍 Similar Books You Might Like:</h4>
-            <p id="recommendation-text"></p>
-        </div>
-        
-        <div style="text-align: center;">
-            <button class="btn" onclick="saveBook()">Save Book</button>
-            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-            <button class="btn btn-secondary" id="delete-btn" style="display: none;" onclick="deleteBook()">Delete</button>
-        </div>
+    <!-- Explore New Books -->
+    <div class="explore-section">
+      <h3>🔍 Explore New Books</h3>
+      <div class="genre-tags">
+        <div class="genre-tag" onclick="exploreGenre('Fiction')">Fiction</div>
+        <div class="genre-tag" onclick="exploreGenre('Mystery')">Mystery</div>
+        <div class="genre-tag" onclick="exploreGenre('Romance')">Romance</div>
+        <div class="genre-tag" onclick="exploreGenre('Science Fiction')">Sci-Fi</div>
+        <div class="genre-tag" onclick="exploreGenre('Fantasy')">Fantasy</div>
+        <div class="genre-tag" onclick="exploreGenre('Non-fiction')">Non-Fiction</div>
+        <div class="genre-tag" onclick="exploreGenre('Biography')">Biography</div>
+      </div>
     </div>
+  </div>
+  
+  <!-- Loading Indicator -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+  
+  <!-- Overlay for modal -->
+  <div class="overlay" id="overlay" onclick="closeModal()"></div>
+  
+  <!-- Book Details Modal -->
+  <div class="book-details" id="book-modal">
+    <h3 id="modal-title">Add New Book</h3>
+    
+    <div class="input-group">
+      <label for="book-title">Book Title:</label>
+      <input type="text" id="book-title" placeholder="Enter book title">
+    </div>
+    
+    <div class="input-group">
+      <label for="book-author">Author:</label>
+      <input type="text" id="book-author" placeholder="Enter author name">
+    </div>
+    
+    <div class="input-group">
+      <label for="book-genre">Genre:</label>
+      <select id="book-genre">
+        <option value="">Select a genre</option>
+        <option value="Fiction">Fiction</option>
+        <option value="Non-fiction">Non-fiction</option>
+        <option value="Mystery">Mystery</option>
+        <option value="Romance">Romance</option>
+        <option value="Science Fiction">Science Fiction</option>
+        <option value="Fantasy">Fantasy</option>
+        <option value="Biography">Biography</option>
+        <option value="History">History</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    
+    <div class="input-group" id="progress-group" style="display: none;">
+      <label for="book-pages">Total Pages:</label>
+      <input type="number" id="book-pages" placeholder="Total pages">
+      
+      <label for="current-page" style="margin-top: 10px;">Current Page:</label>
+      <input type="number" id="current-page" placeholder="Page you're on" oninput="updateProgress()">
+      
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+        <small id="progress-text">Progress: 0%</small>
+      </div>
+    </div>
+    
+    <div class="input-group">
+      <label for="book-notes">Notes/Summary:</label>
+      <textarea id="book-notes" placeholder="Your thoughts about this book..."></textarea>
+    </div>
+    
+    <div class="ai-features">
+      <button class="btn-secondary" onclick="generateAISummary()" id="ai-summary-btn">
+        ✨ Generate AI Summary
+      </button>
+    </div>
+    
+    <div id="recommendations" class="recommendations" style="display: none;">
+      <h4>📍 Similar Books You Might Like:</h4>
+      <p id="recommendation-text"></p>
+    </div>
+    
+    <div style="text-align: center;">
+      <button class="btn" onclick="saveBook()">Save Book</button>
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-secondary" id="delete-btn" style="display: none;" onclick="deleteBook()">Delete</button>
+    </div>
+  </div>
 
-    <!-- AI Recommendations Modal -->
-    <div class="ai-recommendations-modal" id="ai-recommendations-modal">
-        <div class="modal-content">
-            <h3>🤖 AI Book Recommendations</h3>
-            <div id="ai-recommendations-content"></div>
-            <button class="btn btn-secondary" onclick="closeAIRecommendations()">Close</button>
-        </div>
+  <!-- AI Recommendations Modal -->
+  <div class="ai-recommendations-modal" id="ai-recommendations-modal">
+    <div class="modal-content">
+      <h3>🤖 AI Book Recommendations</h3>
+      <div id="ai-recommendations-content"></div>
+      <button class="btn btn-secondary" onclick="closeAIRecommendations()">Close</button>
     </div>
+  </div>
 
-    <script src="/script.js"></script>
+  <!-- ✅ Correct absolute path for JS -->
+  <script src="/script.js"></script>
 </body>
 </html>
-
