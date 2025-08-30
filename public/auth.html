@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Digital Bookshelf - Sign In</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #4B2F1F 0%, #6D4C41 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #F0EADF;
+        }
+        
+        .auth-container {
+            background: rgba(139, 115, 85, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            width: 400px;
+            max-width: 90%;
+            border: 3px solid #A08369;
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            font-size: 2.5rem;
+            color: #F0EADF;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo h1 span.icon {
+            font-size: 3rem;
+            margin-right: 10px;
+            color: #4CAF50;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.3));
+        }
+        
+        .logo p {
+            color: #D9D2C7;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: #7A695B;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: none;
+            color: #F0EADF;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .auth-tab.active {
+            background: #A08369;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #F0EADF;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #7A695B;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #F8F5EE;
+            color: #5D4037;
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn:disabled {
+            background: #7A695B;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .error-message {
+            background: #E53935;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success-message {
+            background: #4CAF50;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(240, 234, 223, 0.3);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border-left-color: #4CAF50;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .password-requirements {
+            font-size: 0.85rem;
+            color: #D9D2C7;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .password-requirements.show {
+            display: block;
+        }
+        
+        .demo-credentials {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .demo-credentials h4 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        
+        .demo-btn {
+            background: transparent;
+            border: 2px solid #4CAF50;
+            color: #4CAF50;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-btn:hover {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 20px;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .logo h1 span.icon {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="logo">
+            <h1><span class="icon">📖</span> Digital Bookshelf</h1>
+            <p>Track your reading journey</p>
+        </div>
+        
+        <div class="auth-tabs">
+            <button class="auth-tab active" onclick="switchTab('signin')">Sign In</button>
+            <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+        
+        <div class="error-message" id="error-message"></div>
+        <div class="success-message" id="success-message"></div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Please wait...</p>
+        </div>
+        
+        <!-- Sign In Form -->
+        <form class="auth-form active" id="signin-form" onsubmit="handleSignIn(event)">
+            <div class="input-group">
+                <label for="signin-username">Username or Email</label>
+                <input type="text" id="signin-username" name="usernameOrEmail" required>
+            </div>
+            <div class="input-group">
+                <label for="signin-password">Password</label>
+                <input type="password" id="signin-password" name="password" required>
+            </div>
+            <button type="submit" class="btn">Sign In</button>
+        </form>
+        
+        <!-- Sign Up Form -->
+        <form class="auth-form" id="signup-form" onsubmit="handleSignUp(event)">
+            <div class="input-group">
+                <label for="signup-username">Username</label>
+                <input type="text" id="signup-username" name="username" required minlength="3">
+            </div>
+            <div class="input-group">
+                <label for="signup-email">Email</label>
+                <input type="email" id="signup-email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="signup-password">Password</label>
+                <input type="password" id="signup-password" name="password" required minlength="6" 
+                       onfocus="showPasswordRequirements()" onblur="hidePasswordRequirements()">
+                <div class="password-requirements" id="password-requirements">
+                    Password must be at least 6 characters long
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="signup-confirm-password">Confirm Password</label>
+                <input type="password" id="signup-confirm-password" name="confirmPassword" required>
+            </div>
+            <button type="submit" class="btn">Sign Up</button>
+        </form>
+        
+        <!-- Demo credentials -->
+        <div class="demo-credentials">
+            <h4>🚀 Quick Demo</h4>
+            <p>Try the app without signing up:</p>
+            <button type="button" class="demo-btn" onclick="fillDemoCredentials()">Use Demo Account</button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.auth-tab').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update forms
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            document.getElementById(tab + '-form').classList.add('active');
+
+            // Clear messages
+            hideMessage();
+        }
+
+        function showMessage(message, type = 'error') {
+            hideMessage();
+            const messageEl = document.getElementById(type + '-message');
+            messageEl.textContent = message;
+            messageEl.style.display = 'block';
+        }
+
+        function hideMessage() {
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('success-message').style.display = 'none';
+        }
+
+        function showLoading(show = true) {
+            const loading = document.getElementById('loading');
+            const buttons = document.querySelectorAll('.btn');
+            
+            if (show) {
+                loading.style.display = 'block';
+                buttons.forEach(btn => btn.disabled = true);
+            } else {
+                loading.style.display = 'none';
+                buttons.forEach(btn => btn.disabled = false);
+            }
+        }
+
+        function showPasswordRequirements() {
+            document.getElementById('password-requirements').classList.add('show');
+        }
+
+        function hidePasswordRequirements() {
+            document.getElementById('password-requirements').classList.remove('show');
+        }
+
+        function fillDemoCredentials() {
+            document.getElementById('signin-username').value = 'demo@bookshelf.com';
+            document.getElementById('signin-password').value = 'demo123';
+            
+            // Switch to sign in tab
+            document.querySelectorAll('.auth-tab').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            
+            document.querySelector('.auth-tab:first-child').classList.add('active');
+            document.getElementById('signin-form').classList.add('active');
+        }
+
+        async function handleSignIn(event) {
+            event.preventDefault();
+            hideMessage();
+            showLoading(true);
+
+            const formData = new FormData(event.target);
+            const data = {
+                usernameOrEmail: formData.get('usernameOrEmail'),
+                password: formData.get('password')
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Store token and user info
+                    localStorage.setItem('bookshelf_token', result.token);
+                    localStorage.setItem('bookshelf_user', JSON.stringify(result.user));
+                    
+                    showMessage('Login successful! Redirecting...', 'success');
+                    
+                    // Redirect to main app
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1500);
+                } else {
+                    showMessage(result.error || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('Network error. Please try again.');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function handleSignUp(event) {
+            event.preventDefault();
+            hideMessage();
+
+            const formData = new FormData(event.target);
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirmPassword');
+
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match');
+                return;
+            }
+
+            showLoading(true);
+
+            const data = {
+                username: formData.get('username'),
+                email: formData.get('email'),
+                password: password
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Store token and user info
+                    localStorage.setItem('bookshelf_token', result.token);
+                    localStorage.setItem('bookshelf_user', JSON.stringify(result.user));
+                    
+                    showMessage('Account created successfully! Redirecting...', 'success');
+                    
+                    // Redirect to main app
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1500);
+                } else {
+                    showMessage(result.error || 'Registration failed');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showMessage('Network error. Please try again.');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Check if user is already logged in
+        function checkExistingLogin() {
+            const token = localStorage.getItem('bookshelf_token');
+            if (token) {
+                // Verify token with backend
+                fetch(`${API_BASE}/api/verify`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // User is already logged in, redirect to main app
+                        window.location.href = '/';
+                    }
+                })
+                .catch(error => {
+                    // Token is invalid, remove it
+                    localStorage.removeItem('bookshelf_token');
+                    localStorage.removeItem('bookshelf_user');
+                });
+            }
+        }
+
+        // Create demo account on first visit
+        async function createDemoAccount() {
+            try {
+                const response = await fetch(`${API_BASE}/api/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: 'demo_user',
+                        email: 'demo@bookshelf.com',
+                        password: 'demo123'
+                    })
+                });
+                
+                if (!response.ok && response.status !== 400) {
+                    console.log('Demo account creation failed, but that\'s okay');
+                }
+            } catch (error) {
+                console.log('Demo account may already exist');
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkExistingLogin();
+            createDemoAccount();
+        });
+    </script>
+</body>
+</html>
