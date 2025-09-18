@@ -7,6 +7,8 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const app = express();
+app.set('trust proxy', 1); // Trust first proxy
+
 
 // Rate limiting
 const limiter = rateLimit({
@@ -451,3 +453,4 @@ process.on('SIGTERM', async () => {
   await mongoose.connection.close();
   process.exit(0);
 });
+
