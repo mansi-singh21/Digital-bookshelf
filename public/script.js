@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE = 'https://your-app-name.up.railway.app/api';
+const API_BASE = 'digital-bookshelf-production.up.railway.app';
 
 // Global Variables
 let books = {
@@ -433,4 +433,5 @@ document.getElementById('book-modal').onclick = function(e) {
 document.getElementById('ai-recommendations-modal').onclick = function(e) {
     e.stopPropagation();
 };
+
 
